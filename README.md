@@ -103,6 +103,5 @@ myproject/
 ## 📄 License & Credits
 This project was developed as part of the **2025 Capstone Design** course at Hanbat National University. All data and models are based on publicly available datasets and research.
 
-> 👥 Team Members: Minho Hwang, Minwoo Baek, Harin Jang, Nayoung Jin
 > 🏫 Capstone Design - Department of Computer Engineering, Hanbat Univ.
 
