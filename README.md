@@ -104,4 +104,4 @@ myproject/
 This project was developed as part of the **2025 Capstone Design** course at Hanbat National University. All data and models are based on publicly available datasets and research.
 
 > 🏫 Capstone Design - Department of Computer Engineering, Hanbat Univ.
-
+> all process are in 캠스톤.pptx
