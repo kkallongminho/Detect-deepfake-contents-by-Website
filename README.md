@@ -105,3 +105,5 @@ This project was developed as part of the **2025 Capstone Design** course at Han
 
 > 🏫 Capstone Design - Department of Computer Engineering, Hanbat Univ.
 > all process are in 캠스톤.pptx
+> .pth file is trained model for deepfake detection
+> deepfake.py is for django's views.py
