@@ -107,3 +107,33 @@ This project was developed as part of the **2025 Capstone Design** course at Han
 > all process are in 캠스톤.pptx
 > .pth file is trained model for deepfake detection
 > deepfake.py is for django's views.py
+>
+> 📁 Dataset Description
+
+This dataset is constructed from two well-known sources: FaceForensics++ and Celeb-DF. It consists of 400 video samples in total — 200 real and 200 fake. For each video, 40 facial frames were extracted, resulting in a large collection of face images suitable for deepfake detection tasks.
+	•	Each frame is preprocessed and resized to 256x256 pixels in JPG format.
+	•	The “real” images correspond to authentic facial videos from the original datasets.
+	•	The “fake” images were synthetically generated using face manipulation techniques in the original datasets (e.g., autoencoder-based facial swapping and GAN-based deepfake generation).
+
+This dataset is particularly well-suited for training and evaluating binary classification models that aim to distinguish between authentic and manipulated facial images.
+
+⸻
+
+📌 Source Details
+	•	FaceForensics++ Dataset: A benchmark dataset for facial forgery detection. It contains high-quality face manipulation videos using Deepfakes, Face2Face, FaceSwap, and NeuralTextures.
+	•	Official: https://github.com/ondyari/FaceForensics
+	•	Celeb-DF Dataset: A dataset with improved deepfake realism using refined synthesis methods. Celeb-DF aims to provide challenging fake videos closer to real-world conditions.
+	•	Official: https://github.com/yuezunli/Celeb-DF
+
+⸻
+
+🔧 Preprocessing Notes
+	•	All videos were face-cropped using a detection algorithm and converted to static frames.
+	•	The dataset was curated and organized to maximize training utility by balancing class distribution and standardizing resolution and format.
+
+⸻
+
+🏷️ Labels
+	•	Label: 0 → Fake (synthetically manipulated)
+	•	Label: 1 → Real (unaltered, genuine videos)
+
