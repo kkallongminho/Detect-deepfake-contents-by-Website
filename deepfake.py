@@ -40,7 +40,7 @@ def load_audio_model():
 def load_image_model():
     global image_model
     if image_model is None:
-        model_path = os.path.join(settings.BASE_DIR, "models", "best_EfficientNetB3_2data_CEn.pth")
+        model_path = os.path.join(settings.BASE_DIR, "models", "deepfake_efficientnetb3_finetuned.pth")
         model = models.efficientnet_b3(weights=None)
         model.classifier[1] = torch.nn.Linear(1536, 1)
         model.load_state_dict(torch.load(model_path, map_location=torch.device("cpu")), strict=False)
