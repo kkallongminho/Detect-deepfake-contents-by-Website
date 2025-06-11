@@ -262,4 +262,3 @@ def result_page(request):
         "audio_result": audio_result,
         "audio_prob": audio_prob,
     })
-02:49 ~/myproject/deepfake/detection $ 
