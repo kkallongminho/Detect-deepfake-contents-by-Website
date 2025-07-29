@@ -61,41 +61,53 @@ def clear_folder(folder_path):
     except Exception as e:
         print(f"폴더 비우기 실패: {e}")
 
-# 이미지 분석
 def detect_fake_image(image_path):
     try:
         model = load_image_model()
+        img = cv2.imread(image_path)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+        # 1️⃣ 얼굴 탐지 먼저 수행
+        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+
+        if len(faces) == 0:
+            print("[INFO] 얼굴을 찾지 못함, 전체 이미지 사용")
+            crop_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        else:
+            # 여러 얼굴이 있으면 첫 번째 얼굴만 분석
+            (x, y, w, h) = faces[0]
+            crop_img = img[y:y+h, x:x+w]
+            crop_img = cv2.cvtColor(crop_img, cv2.COLOR_BGR2RGB)
+
+        # 2️⃣ 얼굴 부분을 PIL Image로 변환 후 모델 입력
+        pil_image = Image.fromarray(crop_img)
         transform = transforms.Compose([
             transforms.Resize((300, 300)),
             transforms.ToTensor(),
         ])
-        image = Image.open(image_path).convert("RGB")
-        image = transform(image).unsqueeze(0)
-        with torch.no_grad():
-            output = model(image)
-            prediction = output.sigmoid().item()
-        result = "Fake" if prediction > 0.5 else "Real"
-        processed_filename = detect_faces_and_draw_boxes(image_path, result)
-        return result, prediction, processed_filename
-    except Exception as e:
-        print(f"[❌ 이미지 분석 실패]: {e}")
-        return "Error", 0.0, None
+        tensor_img = transform(pil_image).unsqueeze(0)
 
-# 얼굴 박스
-def detect_faces_and_draw_boxes(image_path, result_text=""):
-    try:
-        img = cv2.imread(image_path)
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+        with torch.no_grad():
+            output = model(tensor_img)
+            prediction = output.sigmoid().item()
+
+        result = "Fake" if prediction > 0.5 else "Real"
+
+        # 3️⃣ 결과에 따라 박스 색상 지정 후 원본 이미지에 박스 그림
         for (x, y, w, h) in faces:
-            color = (0, 255, 0) if result_text == "Real" else (0, 0, 255)
+            color = (0, 255, 0) if result == "Real" else (0, 0, 255)
             cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
+
+        # 4️⃣ 최종 이미지 저장
         output_path = os.path.join(IMAGE_OUTPUT_DIR, "detected_" + os.path.basename(image_path))
         cv2.imwrite(output_path, img)
-        return output_path
+
+        return result, prediction, output_path
+
     except Exception as e:
-        print(f"❌ 얼굴 박스 그리기 실패: {e}")
-        return None
+        print(f"[❌ 얼굴 기반 이미지 분석 실패]: {e}")
+        return "Error", 0.0, None
+
 
 # 오디오 분석
 def detect_fake_audio(audio_path):
